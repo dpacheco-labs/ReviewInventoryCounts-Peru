@@ -6,9 +6,9 @@ from datetime import datetime
 # Lista de los 40 archivos Excel esperados cada día 9
 # Modifica esta lista con los nombres reales de tus archivos
 EXPECTED_FILES = [
-    "Inventario_Almacen_Lima_Norte.xlsx",
+    "Inventario_Almacen_Lima_Noporte.xlsx",
     "Inventario_Almacen_Lima_Sur.xlsx",
-    "Inventario_Almacen_Lima_Este.xlsx",
+    "Inventario_Almacen_Lima.kmkm_Este.xlsx",
     "Inventario_Almacen_Lima_Oeste.xlsx",
     "Inventario_Almacen_Callao.xlsx",
     "Inventario_Almacen_Arequipa.xlsx",

@@ -1,16 +1,16 @@
 # 📊 Sistema de Revisión de Inventarios - Perú
 
-Sistema automatizado para revisar 40 archivos Excel de inventario cada día 9 del mes, con seguimiento de archivos faltantes.
+Sistema automatizado para revisar los archivos de inventario WIP, PT, RM y Packaging cada WD9 del mes siguiente, en plantas, centros de distribución y transportadoras generados en cada inventario nacional mensual. 
 
 ## 🎯 Características
 
 - ✅ **Carga masiva** de archivos Excel (drag & drop)
-- ✅ **Validación automática** de datos
-- ✅ **Checklist de 40 archivos** esperados
-- ✅ **Tracking histórico** de archivos recibidos/faltantes
+- ✅ **Validación automática** de KPI
+- ✅ **Análisis masivo de archivos operativos** generados en el inventario
+- ✅ **Envío de ratio de cumplimiento** de archivos recibidos/faltantes
 - ✅ **Dashboard visual** con métricas en tiempo real
 - ✅ **Reportes exportables** (Excel y CSV)
-- ✅ **Seguimiento mensual** de pendientes
+- ✅ **Validación de pantallas de integridad** de pendientes
 
 ## 🚀 Instalación
 

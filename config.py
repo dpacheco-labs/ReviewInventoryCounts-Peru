@@ -72,3 +72,14 @@ DATA_DIR = "data"
 UPLOADED_DIR = f"{DATA_DIR}/uploaded"
 TRACKING_DIR = f"{DATA_DIR}/tracking"
 REPORTS_DIR = f"{DATA_DIR}/reports"
+
+# Configuración de email
+# Lista de destinatarios predeterminados para los reportes
+DEFAULT_RECIPIENTS = [
+    "cuentapersonaldp@gmail.com",
+]
+
+# Destinatarios CC predeterminados (opcional)
+DEFAULT_CC = [
+    # "supervisor@abinbev.com",
+]

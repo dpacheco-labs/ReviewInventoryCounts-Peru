@@ -11,6 +11,7 @@ from io import BytesIO
 import config
 from validator import validate_multiple_files
 from tracker import FileTracker
+from email_sender import EmailSender
 
 
 # Configuración de la página
@@ -216,6 +217,97 @@ def upload_files_section():
                 st.rerun()
 
 
+def display_email_form():
+    """Muestra el formulario para enviar reporte por email"""
+    st.markdown("---")
+    st.subheader("📧 Enviar Reporte por Email")
+
+    # Verificar configuración de email
+    email_sender = EmailSender()
+
+    if not email_sender.configured:
+        st.error("""
+        ⚠️ **Configuración de email no encontrada**
+
+        Para enviar emails, debes configurar el archivo `.streamlit/secrets.toml` con tus credenciales SMTP.
+
+        Ver `.streamlit/secrets.toml.example` para más detalles.
+        """)
+        if st.button("❌ Cerrar"):
+            st.session_state.show_email_form = False
+            st.rerun()
+        return
+
+    # Formulario
+    with st.form("email_form"):
+        # Destinatarios
+        recipients_input = st.text_area(
+            "Destinatarios (uno por línea)",
+            value="\n".join(config.DEFAULT_RECIPIENTS),
+            help="Ingresa los emails de los destinatarios, uno por línea"
+        )
+
+        # CC (opcional)
+        cc_input = st.text_area(
+            "CC - Con copia (opcional, uno por línea)",
+            value="\n".join(config.DEFAULT_CC) if config.DEFAULT_CC else "",
+            help="Emails que recibirán copia del reporte"
+        )
+
+        # Botones
+        col1, col2 = st.columns(2)
+
+        with col1:
+            submit = st.form_submit_button("✉️ Enviar Email", type="primary")
+
+        with col2:
+            cancel = st.form_submit_button("❌ Cancelar")
+
+        if cancel:
+            st.session_state.show_email_form = False
+            st.rerun()
+
+        if submit:
+            # Procesar emails
+            recipients = [email.strip() for email in recipients_input.split('\n') if email.strip()]
+            cc = [email.strip() for email in cc_input.split('\n') if email.strip()] if cc_input else []
+
+            if not recipients:
+                st.error("⚠️ Debes ingresar al menos un destinatario")
+                return
+
+            # Obtener datos necesarios
+            session_status = st.session_state.tracker.get_session_status(
+                st.session_state.current_session
+            )
+            validation_results = st.session_state.validation_results
+            missing_files = st.session_state.tracker.get_missing_files(
+                st.session_state.current_session
+            )
+
+            # Generar reporte Excel
+            report_data = generate_validation_report(validation_results)
+
+            # Enviar email
+            with st.spinner("Enviando email..."):
+                success = email_sender.send_report(
+                    recipients=recipients,
+                    cc=cc,
+                    session_id=st.session_state.current_session,
+                    session_status=session_status,
+                    validation_results=validation_results,
+                    missing_files=missing_files,
+                    attachment_data=report_data
+                )
+
+            if success:
+                st.success(f"✅ Email enviado exitosamente a {len(recipients)} destinatario(s)")
+                st.session_state.show_email_form = False
+                st.balloons()
+            else:
+                st.error("❌ Error al enviar el email. Verifica la configuración SMTP.")
+
+
 def display_validation_results():
     """Muestra los resultados de la validación"""
     if st.session_state.validation_results is None:
@@ -270,15 +362,26 @@ def display_validation_results():
                     use_container_width=True
                 )
 
-    # Botón para exportar reporte
-    if st.button("📥 Exportar Reporte de Validación"):
-        report = generate_validation_report(results)
-        st.download_button(
-            "⬇️ Descargar Reporte",
-            data=report,
-            file_name=f"reporte_validacion_{st.session_state.current_session}.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
+    # Botones de exportación y envío
+    col1, col2 = st.columns(2)
+
+    with col1:
+        if st.button("📥 Exportar Reporte de Validación"):
+            report = generate_validation_report(results)
+            st.download_button(
+                "⬇️ Descargar Reporte",
+                data=report,
+                file_name=f"reporte_validacion_{st.session_state.current_session}.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+
+    with col2:
+        if st.button("📧 Enviar Reporte por Email", type="primary"):
+            st.session_state.show_email_form = True
+
+    # Formulario de envío de email
+    if st.session_state.get('show_email_form', False):
+        display_email_form()
 
 
 def display_missing_files():

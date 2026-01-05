@@ -118,18 +118,18 @@ def display_session_dashboard():
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        st.metric("Total Esperados", status["total_expected"])
+        st.metric("🍺 Total Esperados", status["total_expected"])
 
     with col2:
-        st.metric("Recibidos", status["total_received"],
+        st.metric("✅ Recibidos", status["total_received"],
                  delta=f"+{status['total_received']}")
 
     with col3:
-        st.metric("Faltantes", status["total_missing"],
+        st.metric("⏳ Faltantes", status["total_missing"],
                  delta=f"-{status['total_missing']}")
 
     with col4:
-        st.metric("Completado", f"{status['completion_percentage']:.1f}%")
+        st.metric("🎯 Completado", f"{status['completion_percentage']:.1f}%")
 
     # Barra de progreso
     st.progress(status['completion_percentage'] / 100)
@@ -177,7 +177,7 @@ def upload_files_section():
         return
 
     st.markdown("---")
-    st.header("📤 Cargar Archivos Excel")
+    st.header("🍺 Cargar Archivos Excel")
 
     uploaded_files = st.file_uploader(
         "Arrastra o selecciona los archivos Excel",
@@ -186,7 +186,7 @@ def upload_files_section():
     )
 
     if uploaded_files:
-        st.info(f"📁 {len(uploaded_files)} archivo(s) cargado(s)")
+        st.info(f"🍺 {len(uploaded_files)} archivo(s) cargado(s)")
 
         if st.button("🔍 Validar Archivos", type="primary"):
             with st.spinner("Validando archivos..."):
@@ -287,7 +287,7 @@ def display_missing_files():
         return
 
     st.markdown("---")
-    st.header("🔍 Archivos Faltantes")
+    st.header("🍺⏳ Archivos Faltantes")
 
     missing = st.session_state.tracker.get_missing_files(
         st.session_state.current_session

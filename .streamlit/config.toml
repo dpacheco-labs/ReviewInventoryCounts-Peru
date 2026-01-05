@@ -1,0 +1,11 @@
+[theme]
+# Colores corporativos de AB InBev
+primaryColor = "#FDB71A"  # Amarillo/Dorado AB InBev
+backgroundColor = "#FFFFFF"  # Blanco
+secondaryBackgroundColor = "#F0F2F6"  # Gris claro
+textColor = "#003087"  # Azul oscuro AB InBev
+font = "sans serif"
+
+[server]
+headless = true
+port = 8501

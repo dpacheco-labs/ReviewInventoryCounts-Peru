@@ -41,3 +41,5 @@ data/tracking/*
 
 # Streamlit
 .streamlit/secrets.toml
+!.streamlit/config.toml
+!.streamlit/style.css

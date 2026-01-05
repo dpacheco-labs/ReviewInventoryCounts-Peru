@@ -1,0 +1,58 @@
+/* Estilos personalizados AB InBev */
+
+/* Barra de progreso con colores AB InBev */
+.stProgress > div > div > div > div {
+    background-color: #FDB71A !important;
+}
+
+/* Botones primarios */
+.stButton>button[kind="primary"] {
+    background-color: #FDB71A !important;
+    color: #003087 !important;
+    font-weight: bold !important;
+    border: none !important;
+}
+
+.stButton>button[kind="primary"]:hover {
+    background-color: #e5a615 !important;
+    color: #003087 !important;
+}
+
+/* Métricas */
+[data-testid="stMetricValue"] {
+    color: #003087 !important;
+}
+
+/* Headers */
+h1, h2, h3 {
+    color: #003087 !important;
+}
+
+/* Sidebar */
+[data-testid="stSidebar"] {
+    background-color: #f8f9fa !important;
+}
+
+/* File uploader */
+[data-testid="stFileUploader"] {
+    border: 2px dashed #FDB71A !important;
+    border-radius: 10px !important;
+}
+
+/* Success messages */
+.stSuccess {
+    background-color: #d4edda !important;
+    color: #155724 !important;
+}
+
+/* Warning messages */
+.stWarning {
+    background-color: #fff3cd !important;
+    color: #856404 !important;
+}
+
+/* Error messages */
+.stError {
+    background-color: #f8d7da !important;
+    color: #721c24 !important;
+}

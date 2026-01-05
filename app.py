@@ -15,10 +15,25 @@ from tracker import FileTracker
 
 # Configuración de la página
 st.set_page_config(
-    page_title="Revisión de Inventarios - Perú",
-    page_icon="📊",
+    page_title="AB InBev - Revisión de Inventarios Perú",
+    page_icon="🍺",
     layout="wide"
 )
+
+# Colores corporativos AB InBev
+ABINBEV_BLUE = "#003087"
+ABINBEV_GOLD = "#FDB71A"
+ABINBEV_GREEN = "#28a745"
+ABINBEV_RED = "#dc3545"
+
+
+def load_css():
+    """Carga estilos CSS personalizados de AB InBev"""
+    try:
+        with open('.streamlit/style.css') as f:
+            st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+    except FileNotFoundError:
+        pass  # Si no existe el archivo CSS, continuar sin estilos
 
 
 def init_session_state():
@@ -35,6 +50,15 @@ def init_session_state():
 
 def create_or_select_session():
     """UI para crear o seleccionar sesión de revisión"""
+    # Branding AB InBev en sidebar
+    st.sidebar.markdown(f"""
+    <div style='text-align: center; padding: 1rem 0; background: linear-gradient(135deg, {ABINBEV_BLUE} 0%, {ABINBEV_BLUE} 100%); border-radius: 10px; margin-bottom: 1rem;'>
+        <h1 style='color: {ABINBEV_GOLD}; margin: 0; font-size: 2rem;'>🍺</h1>
+        <h3 style='color: white; margin: 0.5rem 0 0 0;'>AB InBev</h3>
+        <p style='color: {ABINBEV_GOLD}; margin: 0.25rem 0 0 0; font-size: 0.9rem;'>Perú</p>
+    </div>
+    """, unsafe_allow_html=True)
+
     st.sidebar.header("📅 Sesión de Revisión")
 
     # Obtener sesiones existentes
@@ -82,9 +106,13 @@ def display_session_dashboard():
         st.error("Error al cargar la sesión")
         return
 
-    # Header
-    st.title(f"📊 Revisión de Inventarios - {session_id}")
-    st.markdown("---")
+    # Header con branding AB InBev
+    st.markdown(f"""
+    <div style='text-align: center; padding: 1.5rem; background: linear-gradient(135deg, {ABINBEV_BLUE} 0%, #004ba0 100%); border-radius: 15px; margin-bottom: 1rem;'>
+        <h1 style='color: white; margin: 0; font-size: 2.5rem;'>📊 Revisión de Inventarios</h1>
+        <p style='color: {ABINBEV_GOLD}; margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: bold;'>{session_id}</p>
+    </div>
+    """, unsafe_allow_html=True)
 
     # Métricas principales
     col1, col2, col3, col4 = st.columns(4)
@@ -114,9 +142,18 @@ def display_session_dashboard():
             labels=['Recibidos', 'Faltantes'],
             values=[status['total_received'], status['total_missing']],
             hole=.3,
-            marker_colors=['#28a745', '#dc3545']
+            marker_colors=[ABINBEV_GOLD, ABINBEV_RED],
+            textfont=dict(size=14, color='white')
         )])
-        fig.update_layout(title="Estado de Archivos", height=300)
+        fig.update_layout(
+            title={
+                'text': "Estado de Archivos",
+                'font': {'size': 18, 'color': ABINBEV_BLUE}
+            },
+            height=300,
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)'
+        )
         st.plotly_chart(fig, use_container_width=True)
 
     with col2:
@@ -307,6 +344,9 @@ def generate_validation_report(validation_results) -> bytes:
 
 def main():
     """Función principal de la aplicación"""
+    # Cargar estilos personalizados AB InBev
+    load_css()
+
     init_session_state()
 
     # Sidebar para selección de sesión
@@ -318,10 +358,15 @@ def main():
     display_validation_results()
     display_missing_files()
 
-    # Footer
+    # Footer con branding AB InBev
     st.sidebar.markdown("---")
-    st.sidebar.caption("Sistema de Revisión de Inventarios v1.0")
-    st.sidebar.caption("Día de revisión: 9 de cada mes")
+    st.sidebar.markdown(f"""
+    <div style='text-align: center; padding: 1rem; background-color: #f8f9fa; border-radius: 10px;'>
+        <p style='color: {ABINBEV_BLUE}; margin: 0; font-weight: bold;'>AB InBev Perú</p>
+        <p style='color: #6c757d; margin: 0.5rem 0 0 0; font-size: 0.85rem;'>Sistema de Revisión de Inventarios v1.0</p>
+        <p style='color: {ABINBEV_GOLD}; margin: 0.25rem 0 0 0; font-size: 0.85rem; font-weight: bold;'>Día de revisión: 9 de cada mes</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 
 if __name__ == "__main__":

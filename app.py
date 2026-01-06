@@ -240,17 +240,28 @@ def display_email_form():
 
     # Formulario
     with st.form("email_form"):
+        # Obtener destinatarios predeterminados de secrets (si existen)
+        default_recipients = ""
+        default_cc = ""
+        try:
+            if "default_recipients" in st.secrets["email"]:
+                default_recipients = st.secrets["email"]["default_recipients"].replace(",", "\n")
+            if "default_cc" in st.secrets["email"]:
+                default_cc = st.secrets["email"]["default_cc"].replace(",", "\n")
+        except (KeyError, FileNotFoundError):
+            pass
+
         # Destinatarios
         recipients_input = st.text_area(
             "Destinatarios (uno por línea)",
-            value="\n".join(config.DEFAULT_RECIPIENTS),
+            value=default_recipients,
             help="Ingresa los emails de los destinatarios, uno por línea"
         )
 
         # CC (opcional)
         cc_input = st.text_area(
             "CC - Con copia (opcional, uno por línea)",
-            value="\n".join(config.DEFAULT_CC) if config.DEFAULT_CC else "",
+            value=default_cc,
             help="Emails que recibirán copia del reporte"
         )
 
